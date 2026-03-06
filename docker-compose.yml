@@ -1,0 +1,31 @@
+services:
+  frankenphp:
+    build:
+      context: .
+    user: "1000:1000"
+    entrypoint: []
+    working_dir: /app
+    command: php artisan octane:frankenphp --workers=1 --max-requests=1 --host=0.0.0.0 --port=8000 --caddyfile=/app/Caddyfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      APP_ENV: local
+      APP_DEBUG: true
+
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: dishy_db
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: marley
+      MYSQL_PASSWORD: secret
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
