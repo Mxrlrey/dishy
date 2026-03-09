@@ -7,10 +7,12 @@ import {
     Card,
     PrimaryButton,
     TextInput,
-    InputLabel,
-    InputError,
-    Checkbox,
-    InverseButton
+    InverseButton,
+    TextArea,
+    SelectInput,
+    FormField,
+    StatusToggle,
+    SlugPreview
 } from '@/Components';
 
 interface Menu {
@@ -66,89 +68,86 @@ export default function Create({ auth, menus }: Props) {
                         </div>
 
                         <form onSubmit={submit} className="space-y-6">
-                            {/* Nome do Prato */}
-                            <div>
-                                <InputLabel htmlFor="name" value="Nome do Prato" />
+                            {/* Nome */}
+                            <FormField label="Nome" htmlFor="name" error={errors.name}>
                                 <TextInput
                                     id="name"
                                     value={data.name}
                                     onChange={(e) => handleNameChange(e.target.value)}
+                                    isFocused
                                     placeholder="Ex: Filé à Parmegiana"
-                                    isFocused={true}
+                                    className="block w-full"
                                 />
-                                <InputError message={errors.name} />
-                            </div>
+                            </FormField>
 
                             {/* Descrição */}
-                            <div>
-                                <InputLabel htmlFor="description" value="Descrição do Prato" />
-                                <textarea
+                            <FormField label="Descrição" htmlFor="description" error={errors.description}>
+                                <TextArea
                                     id="description"
                                     value={data.description}
                                     onChange={(e) => setData('description', e.target.value)}
                                     rows={3}
-                                    className="w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-[1px] shadow-sm mt-1 text-sm transition-colors"
-                                    placeholder="Descreva os ingredientes, se serve duas pessoas, etc."
+                                    placeholder="Detalhes do item, ingredientes ou volume (ex: 500ml)..."
                                 />
-                                <InputError message={errors.description} />
-                            </div>
+                            </FormField>
 
-                            {/* Categoria / Menu */}
-                            <div>
-                                <InputLabel htmlFor="menu_id" value="Categoria (Menu)" />
-                                <select
-                                    id="menu_id"
-                                    value={data.menu_id}
-                                    onChange={(e) => setData('menu_id', e.target.value)}
-                                    className="w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-[1px] shadow-sm mt-1 text-sm"
-                                >
-                                    <option value="">Selecione uma categoria</option>
-                                    {menus?.map((menu) => (
-                                        <option key={menu.id} value={menu.id}>
-                                            {menu.name}
-                                        </option>
-                                    ))}
-                                </select>
-                                <InputError message={errors.menu_id} />
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-                                {/* Preço */}
-                                <div>
-                                    <InputLabel htmlFor="price" value="Preço (R$)" />
-                                    <TextInput
-                                        id="price"
-                                        type="number"
-                                        step="0.01"
-                                        value={data.price}
-                                        onChange={(e) => setData('price', e.target.value)}
-                                        placeholder="0.00"
-                                    />
-                                    <InputError message={errors.price} />
+                            <div className="grid grid-cols-1 md:grid-cols-6 gap-6 items-start">
+                                {/* Categoria */}
+                                <div className="md:col-span-3">
+                                    <FormField label="Menu (Categoria)" htmlFor="menu_id" error={errors.menu_id}>
+                                        <SelectInput
+                                            id="menu_id"
+                                            value={data.menu_id}
+                                            onChange={(e) => setData('menu_id', e.target.value)}
+                                        >
+                                            <option value="">Selecione um menu</option>
+                                            {menus?.map((menu) => (
+                                                <option key={menu.id} value={menu.id}>
+                                                    {menu.name}
+                                                </option>
+                                            ))}
+                                        </SelectInput>
+                                    </FormField>
                                 </div>
 
-                                {/* Status Checkbox */}
-                                <div className="flex items-center h-[42px] mt-6">
-                                    <label className="flex items-center cursor-pointer group">
-                                        <Checkbox
-                                            name="is_active"
-                                            checked={data.is_active}
-                                            onChange={(e) => setData('is_active', e.target.checked)}
+                                {/* Preço */}
+                                <div className="md:col-span-2">
+                                    <FormField label="Preço (R$)" htmlFor="price" error={errors.price}>
+                                        <TextInput
+                                            id="price"
+                                            type="number"
+                                            step="0.01"
+                                            value={data.price}
+                                            onChange={(e) => setData('price', e.target.value)}
+                                            placeholder="0.00"
+                                            className="w-full"
                                         />
-                                        <span className="ms-2 text-sm font-medium text-gray-700 group-hover:text-blue-600 transition-colors">
-                                            Prato Ativo
-                                        </span>
-                                    </label>
+                                    </FormField>
+                                </div>
+
+                                {/* Status */}
+                                <div className="md:col-span-1">
+                                    <FormField
+                                        label="Status"
+                                        htmlFor="is_active"
+                                        error={errors.is_active}
+                                    >
+                                        <div className="mt-3">
+                                            <StatusToggle
+                                                value={data.is_active}
+                                                onChange={(newValue) => setData('is_active', newValue)}
+                                            />
+                                            <input type="hidden" name="is_active" value={data.is_active ? 1 : 0} />
+                                        </div>
+                                    </FormField>
                                 </div>
                             </div>
 
                             {/* Slug */}
-                            <div className="bg-gray-50 p-3 border border-dashed border-gray-200 rounded-[1px]">
-                                <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">URL Sugerida:</span>
-                                <div className="text-sm font-mono text-blue-600 mt-1 truncate">
-                                    /prato/{data.slug || '...'}
-                                </div>
-                            </div>
+                            <SlugPreview
+                                prefix="/item"
+                                slug={data.slug}
+                            />
 
                             {/* Ações */}
                             <div className="flex items-center justify-end gap-4 pt-4 border-t border-gray-100">

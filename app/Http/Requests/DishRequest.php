@@ -52,7 +52,7 @@ class DishRequest extends FormRequest
     {
         $this->merge([
             'slug' => Str::slug($this->slug ?? $this->name),
-            'is_active' => $this->has('is_active'),
+            'is_active' => filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN),
         ]);
     }
 }

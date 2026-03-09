@@ -74,8 +74,10 @@ class DishController extends Controller
      */
     public function edit(Dish $dish): Response
     {
+
         return Inertia::render('Dishes/Edit', [
-            'dish' => $dish
+            'dish' => $dish,
+            'menus' => Menu::select('id', 'name')->get(),
         ]);
     }
 
