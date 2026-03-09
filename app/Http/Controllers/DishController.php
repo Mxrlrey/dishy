@@ -61,6 +61,9 @@ class DishController extends Controller
      */
     public function show(Dish $dish): Response
     {
+        // Carrega o menu atrelado ao prato
+        $dish->load('menu');
+
         return Inertia::render('Dishes/Show', [
             'dish' => $dish
         ]);
