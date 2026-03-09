@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class DishRequest extends FormRequest
@@ -50,6 +51,7 @@ class DishRequest extends FormRequest
     public function prepareForValidation(): void
     {
         $this->merge([
+            'slug' => Str::slug($this->slug ?? $this->name),
             'is_active' => $this->has('is_active'),
         ]);
     }

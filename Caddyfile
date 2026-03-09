@@ -1,0 +1,23 @@
+{
+    # Desativa o HTTPS automático para desenvolvimento local simples
+    # Se quiser HTTPS real, o FrankenPHP cuida disso, mas exige mais setup no WSL2
+    local_certs
+    skip_install_trust
+}
+
+:8000 {
+    # Define a pasta raiz do Laravel
+    root * public/
+
+    # Habilita o suporte ao FrankenPHP (PHP 8.3+ nativo)
+    php_server
+
+    # Adiciona compressão para carregar os assets do React mais rápido
+    encode zstd gzip
+
+    # O Caddy cuida do roteamento para o public/index.php
+    # (o FrankenPHP lida com isso automaticamente com a diretiva php_server)
+
+    # Se você estiver rodando no WSL2 e tiver problemas com HMR do Vite:
+    header Access-Control-Allow-Origin "*"
+}
