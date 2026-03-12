@@ -7,6 +7,15 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
+/**
+ * Representa a requisição de dados para o Prato (Dish).
+ *
+ * @property string $name Nome do prato que será exibido no cardápio.
+ * @property string|null $slug URL amigável gerada automaticamente para o item.
+ * @property string|float $price Preço de venda configurado para o prato.
+ * @property int $menu_id Identificador da categoria (Menu) à qual o prato pertence.
+ * @property mixed $is_active Define se o prato está disponível para visualização.
+ */
 class DishRequest extends FormRequest
 {
 

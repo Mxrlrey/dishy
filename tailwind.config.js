@@ -15,8 +15,19 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            keyframes: {
+                ripple: {
+                    '0%': { transform: 'scale(0)', opacity: '0.5' },
+                    '100%': { transform: 'scale(10)', opacity: '0' },
+                },
+            },
+            animation: {
+                ripple: 'ripple 700ms cubic-bezier(0.4, 0, 0.2, 1)',
+            },
         },
     },
+
+
 
     plugins: [forms],
 };

@@ -7,6 +7,14 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
+/**
+ * Representa a requisição de dados para o Menu.
+ *
+ * @property string $name Nome da categoria ou item do menu.
+ * @property string|null $slug URL amigável gerada automaticamente.
+ * @property mixed $is_active Define se o registro está visível para os clientes.
+ * @property int|null|string $set_order Posição de ordenação na listagem do cardápio.
+ */
 class MenuRequest extends FormRequest
 {
 
